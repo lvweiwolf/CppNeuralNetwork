@@ -2,6 +2,7 @@
 #define _MATRIX_H
 
 #include <vector>
+#include <cblas.h>
 
 namespace lvweiML
 {
@@ -28,7 +29,7 @@ namespace lvweiML
         T       *_data;
         size_t  _row;
         size_t  _col;
-    }
+    };
 }
 
 #endif // _MATRIX_H

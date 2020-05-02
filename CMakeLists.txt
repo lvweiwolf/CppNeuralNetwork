@@ -2,9 +2,19 @@ cmake_minimum_required(VERSION 3.0.0)
 project(CppNeuralNetwork)
 
 set(APPLICATION_SOURCE ./src/hello.cpp)
-SET(DLL_SOURCE ./MachineLearningLib/export.cpp)
+set(ML_SOURCE ./MachineLearningLib/export.cpp)
 
+# 头文件路径
+set(openBLAS_INC_DIR openBLAS/include)
+# lib库路径
+set(openBLAS_LINK_DIR openBLAS/lib)
 
-add_library(export SHARED ${DLL_SOURCE})
+# 头文件
+include_directories(${openBLAS_INC_DIR})
+link_directories(${openBLAS_LINK_DIR})
+link_libraries(openblas)
+
+add_library(export SHARED ${ML_SOURCE})
 add_executable(hello ${APPLICATION_SOURCE})
-target_link_libraries(hello export)
+# 链接openBLAS
+target_link_libraries(hello export openblas)
