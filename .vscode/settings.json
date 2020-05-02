@@ -1,0 +1,9 @@
+{
+    "cmake.generator": "MinGW Makefiles",
+    "files.associations": {
+        "*.boowaygis": "xml",
+        "*.earth": "xml",
+        "*.cu": "cpp",
+        "ostream": "cpp"
+    },
+}
