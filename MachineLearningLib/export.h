@@ -1,6 +1,8 @@
 #ifndef _EXPORT_H
 #define _EXPORT_H
 
+#include "Common/Matrix.h"
+
 #ifdef EPXORT_DLL
 #define EXPORT_API __declspec(dllexport)
 #else
