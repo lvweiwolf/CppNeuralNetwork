@@ -2,6 +2,7 @@
 #define _MATRIX_H
 
 #include <vector>
+#include <string>
 #include <initializer_list>
 
 namespace lvweiML
@@ -20,6 +21,8 @@ namespace lvweiML
         Matrix(const Matrix& m);
         
         virtual ~Matrix();
+        
+        std::string str() const;
 
         // 赋值操作
         Matrix& operator=(const std::vector<std::vector<T>>& data);
@@ -40,7 +43,7 @@ namespace lvweiML
         Matrix& operator/=(const Matrix& m); 
         // 舒尔积：两个对象的逐元素乘法
         Matrix& operator%=(const Matrix& m); 
-        
+       
     private:
         void init_cold();
 

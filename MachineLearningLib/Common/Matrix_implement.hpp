@@ -1,5 +1,6 @@
 #include <cblas.h>
 #include <iostream>
+#include <sstream>
 #include "Memory.hpp"
 
 #define MAX_UWORD  0xffffffffffffffff
@@ -64,6 +65,22 @@ namespace lvweiML
     }
 
     template<typename T>
+    std::string 
+    Matrix<T>::str() const
+    {
+        std::stringstream ss;
+        for (auto r = 0; r < _row; ++r)
+        {
+            for (auto c = 0; c < _col; ++c)
+                ss << _data[r * _col + c] << " ";
+
+            ss << std::endl;   
+        }
+
+        return ss.str();        
+    }
+
+    template<typename T>
     Matrix<T>& 
     Matrix<T>::operator=(const std::vector<std::vector<T>>& data)
     {
@@ -103,7 +120,7 @@ namespace lvweiML
             
             for(; col_it != col_it_end; ++col_it)
             {
-                _data[row_num + col_num*n_rows] = (*col_it);
+                _data[row_num * n_cols + col_num] = (*col_it);
                 ++col_num;
             }
 
@@ -151,12 +168,14 @@ namespace lvweiML
             
             for(; col_it != col_it_end; ++col_it)
             {
-                _data[row_num + col_num*n_rows] = (*col_it);
+                _data[row_num * n_cols + col_num] = (*col_it);
                 ++col_num;
             }
 
             ++row_num;
         }
+
+        return *this;
     }
 
     template<typename T>
@@ -180,17 +199,35 @@ namespace lvweiML
         _data[0] = val;
         return *this;
     }
-
-    template<typename T>
-    Matrix<T>&
-    Matrix<T>::operator+=(const T val)
-    {
-        size_t n_elem = _row * _col;
-
-        if (n_elem > 0)
-        {
-           
-        }
-    }
     
+#define MATRIX_SCALAR_OP_IMPL(op)           \
+    template<typename T>                    \
+    Matrix<T>&                              \
+    Matrix<T>::operator op(const T val)      \
+    {                                       \
+        size_t n_elem = _row * _col;        \
+        for (auto i = 0; i < n_elem; i++)   \
+            _data[i] op val;                \
+                                            \
+        return *this;                       \
+    }
+
+    MATRIX_SCALAR_OP_IMPL(+=)
+    MATRIX_SCALAR_OP_IMPL(-=)
+    MATRIX_SCALAR_OP_IMPL(*=)
+    MATRIX_SCALAR_OP_IMPL(/=)
+    
+    // template<typename T>
+    // Matrix<T>&
+    // Matrix<T>::operator+=(const Matrix<T>& m)
+    // {
+    //     if (_row == m._row && _col == m._col)
+    //     {
+    //         size_t n_elem = _row * _col;
+    //         for (auto i = 0; i < n_elem; ++i)
+    //             _data[i] += m._data[i];
+    //     }
+
+    //     return *this;
+    // }
 }
