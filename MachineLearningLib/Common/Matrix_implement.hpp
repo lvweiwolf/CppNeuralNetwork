@@ -18,6 +18,7 @@ namespace lvweiML
         
         std::cout << "Matrix::init(): acquiring memory" << std::endl;
         _data = Memory::acquire<T>(_row * _col);
+        // memset(_data, 0, (_row * _col) * sizeof(T));
     }
 
     template<typename T>
@@ -217,17 +218,48 @@ namespace lvweiML
     MATRIX_SCALAR_OP_IMPL(*=)
     MATRIX_SCALAR_OP_IMPL(/=)
     
-    // template<typename T>
-    // Matrix<T>&
-    // Matrix<T>::operator+=(const Matrix<T>& m)
-    // {
-    //     if (_row == m._row && _col == m._col)
-    //     {
-    //         size_t n_elem = _row * _col;
-    //         for (auto i = 0; i < n_elem; ++i)
-    //             _data[i] += m._data[i];
-    //     }
+    
+#define MATRIX_MATRIX_OP_IMPL(op)               \
+    template<typename T>                        \
+    Matrix<T>&                                  \
+    Matrix<T>::operator op(const Matrix<T>& m)  \
+    {                                           \
+        if (_row == m._row && _col == m._col)   \
+        {                                       \
+            size_t n_elem = _row * _col;        \
+            for (auto i = 0; i < n_elem; ++i)   \
+                _data[i] op m._data[i];         \
+        }                                       \
+                                                \
+        return *this;                           \
+    }
 
-    //     return *this;
-    // }
+    MATRIX_MATRIX_OP_IMPL(+=)
+    MATRIX_MATRIX_OP_IMPL(-=)
+    MATRIX_MATRIX_OP_IMPL(/=)
+
+    template<typename T>                        
+    Matrix<T>&                                  
+    Matrix<T>::operator *=(const Matrix<T>& m)  
+    {       
+        if (_col == m._row)
+        {
+            auto& A = _data;    // M x K
+            auto& B = m._data;  // K x N
+            auto& M = _row;
+            auto& K = _col;
+            auto& N = m._col;
+            auto& LDA = K; 
+            auto& LDB = N;
+            auto& LDC = N;     
+            Matrix<T> result(M, N);  // M x N
+            auto& C = result._data;
+
+            // C = αAB + βC (α = 1.0, β = 0.0)
+            cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, M, N, K, 1.0, A, LDA, B, LDB, 0.0, C, LDC);
+            *this = result;
+        }
+       
+        return *this;                           
+    }   
 }
