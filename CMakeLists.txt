@@ -17,4 +17,4 @@ link_libraries(openblas)
 add_library(export SHARED ${ML_SOURCE})
 add_executable(hello ${APPLICATION_SOURCE})
 # 链接openBLAS
-target_link_libraries(hello export openblas)
+target_link_libraries(hello export)
