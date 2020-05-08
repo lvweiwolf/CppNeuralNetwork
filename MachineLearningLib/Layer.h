@@ -5,7 +5,7 @@ class Layer
 {
 public:
     Layer(size_t input, size_t output);
-    Layer(size_t input, size_t output, activation = "sigmoid");
+    Layer(size_t input, size_t output, const char* activation="sigmoid");
 
     virtual ~Layer();
 
