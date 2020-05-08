@@ -51,4 +51,5 @@
         "typeinfo": "cpp"
     },
     "editor.quickSuggestions": true,
+    "editor.detectIndentation": false,
 }

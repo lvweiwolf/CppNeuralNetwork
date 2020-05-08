@@ -20,8 +20,7 @@ int main(int argc, char **argv)
     //               {1.0, 1.0}, 
     //               {2.0, 1.0}});
 
-    A *= B;
-    std::cout << A.str() << std::endl;
-   
+    auto C = A * B;
+    std::cout << C.str() << std::endl;
     return 0;
 }
